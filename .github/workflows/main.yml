@@ -8,6 +8,10 @@ on:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    
+    # This block injects the secret as an environment variable
+    env:
+      GSPREAD_CREDS_JSON: ${{ secrets.GSPREAD_CREDS }}
 
     steps:
       - name: Check out repository
@@ -23,20 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install gspread gspread-dataframe pandas beautifulsoup4 requests
           
-      - name: Create credentials file
-        run: |
-          echo "${{ secrets.GSPREAD_CREDS }}" > service_account_creds.json
-      
-      # --- NEW DEBUGGING STEPS START HERE ---
-
-      - name: List files in directory
-        run: ls -l
-        
-      - name: Verify secret content (first 50 chars)
-        run: |
-          echo "Secret starts with: $(echo "${{ secrets.GSPREAD_CREDS }}" | cut -c 1-50)..."
-
-      # --- NEW DEBUGGING STEPS END HERE ---
+      # The "Create credentials file" step is no longer needed
 
       - name: Run scraper
         run: |
