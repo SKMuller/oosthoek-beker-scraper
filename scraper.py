@@ -32,22 +32,24 @@ print("Setup Complete. Proceed to the Configuration cell.")
 
 # Dictionary: { "Team Name for Tab": ["URL1", "URL2", ...] }
 TEAM_URLS = {
-    "SISSA 1 - NOSBO": ["https://nosbo.netstand.nl/teams/view/481","https://nosbo.netstand.nl/teams/view/568"],
-    "SISSA 2 - NOSBO": ["https://nosbo.netstand.nl/teams/view/488","https://nosbo.netstand.nl/teams/view/575"],
-    "SISSA 3 - NOSBO": ["https://nosbo.netstand.nl/teams/view/493","https://nosbo.netstand.nl/teams/view/597"],
-    "SISSA 4 - NOSBO": ["https://nosbo.netstand.nl/teams/view/501","https://nosbo.netstand.nl/teams/view/600"],
-    "SISSA 5 - NOSBO": ["https://nosbo.netstand.nl/teams/view/507","https://nosbo.netstand.nl/teams/view/582"],
+    "SISSA 1 - NOSBO": ["https://nosbo.netstand.nl/teams/view/608"],
+    "SISSA 2 - NOSBO": ["https://nosbo.netstand.nl/teams/view/624"],
+    "SISSA 3 - NOSBO": ["https://nosbo.netstand.nl/teams/view/617"],
+    "SISSA 4 - NOSBO": ["https://nosbo.netstand.nl/teams/view/616"],
+    "SISSA 5 - NOSBO": ["https://nosbo.netstand.nl/teams/view/639"],
+    "SISSA 6 - NOSBO": ["https://nosbo.netstand.nl/teams/view/631"],
+"
 
-    "SISSA - Open Beker": ["https://nosbo.netstand.nl/teams/view/529"],
-    "SISSA - 1900 Beker": ["https://nosbo.netstand.nl/teams/view/531"],
-    "SISSA - 1700 Beker": ["https://nosbo.netstand.nl/teams/view/542"],
+    "SISSA - Open Beker": ["https://nosbo.netstand.nl/teams/view/652"],
+    "SISSA - 1900 Beker": ["https://nosbo.netstand.nl/teams/view/665"],
+    "SISSA - 1700 Beker": ["https://nosbo.netstand.nl/teams/view/668"],
 
-    "SISSA 1 - KNSB": ["https://knsb.netstand.nl/teams/view/5415"],
-    "SISSA 2 - KNSB": ["https://knsb.netstand.nl/teams/view/5407"],
-    "SISSA 3 - KNSB": ["https://knsb.netstand.nl/teams/view/5610"],
-    "SISSA 4 - KNSB": ["https://knsb.netstand.nl/teams/view/5617"],
+    "SISSA 1 - KNSB": ["https://knsb.netstand.nl/teams/view/6259"],
+    "SISSA 2 - KNSB": ["https://knsb.netstand.nl/teams/view/6251"],
+    "SISSA 3 - KNSB": ["https://knsb.netstand.nl/teams/view/6452"],
+    "SISSA 4 - KNSB": ["https://knsb.netstand.nl/teams/view/6459"],
 
-    "SISSA - KNSB Beker": ["https://knsb.netstand.nl/teams/view/5755"]
+    "SISSA - KNSB Beker": ["https://knsb.netstand.nl/teams/view/6610"]
 }
 
 # Columns to extract directly from the table (used during initial processing)
