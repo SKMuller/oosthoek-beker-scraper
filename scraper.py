@@ -7,21 +7,33 @@ import time
 import logging
 import re
 import gspread.utils # Ensure this is imported
+import os
+import json
 
 # --- Authentication ---
-# Authenticate using the Service Account JSON file
-SERVICE_ACCOUNT_FILE = "service_account_creds.json" # The file we downloaded
+# Load credentials from the environment variable set in GitHub Actions
+creds_json_string = os.environ.get("GSPREAD_CREDS_JSON")
 
-print("Authenticating with Google Service Account...")
-try:
-    # gspread.service_account() is the new way to auth
-    gc = gspread.service_account(filename=SERVICE_ACCOUNT_FILE)
-    print("Authentication successful!")
-except Exception as e:
-    print(f"!!! FAILED to authenticate using {SERVICE_ACCOUNT_FILE} !!!")
-    print("Make sure the file is in the same directory and you shared your Sheet with the client_email.")
-    print(f"Error: {e}")
-    gc = None # Set gc to None so the script stops
+print("Authenticating with Google Service Account from environment variable...")
+
+if creds_json_string:
+    try:
+        # Convert the JSON string into a Python dictionary
+        creds_dict = json.loads(creds_json_string)
+
+        # Authenticate using the dictionary directly
+        gc = gspread.service_account_from_dict(creds_dict)
+        print("Authentication successful!")
+
+    except json.JSONDecodeError:
+        print("!!! FAILED to authenticate. The GSPREAD_CREDS_JSON secret is not a valid JSON string. !!!")
+        gc = None
+    except Exception as e:
+        print(f"!!! FAILED to authenticate using service account dictionary: {e} !!!")
+        gc = None
+else:
+    print("!!! FAILED to authenticate. GSPREAD_CREDS_JSON environment variable is not set. !!!")
+    gc = None
 
 # Logging Configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - Colab - %(levelname)s - %(message)s')
@@ -507,3 +519,4 @@ else:
 
 
 print("--- Execution Finished ---")
+
