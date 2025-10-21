@@ -38,7 +38,6 @@ TEAM_URLS = {
     "SISSA 4 - NOSBO": ["https://nosbo.netstand.nl/teams/view/616"],
     "SISSA 5 - NOSBO": ["https://nosbo.netstand.nl/teams/view/639"],
     "SISSA 6 - NOSBO": ["https://nosbo.netstand.nl/teams/view/631"],
-"
 
     "SISSA - Open Beker": ["https://nosbo.netstand.nl/teams/view/652"],
     "SISSA - 1900 Beker": ["https://nosbo.netstand.nl/teams/view/665"],
@@ -505,5 +504,6 @@ else:
             logging.error(f"Google API Error during sheet cleanup/reordering: {e}")
         except Exception as e:
             logging.error(f"Unexpected error during sheet cleanup/reordering: {e}")
+
 
 print("--- Execution Finished ---")
