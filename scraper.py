@@ -420,6 +420,8 @@ else:
     else:
         all_teams_combined_df = pd.concat(all_teams_list, ignore_index=True)
         required_agg_cols = ['Speler', 'Pt.', 'Games']
+        all_teams_combined_df['Pt.'] = pd.to_numeric(all_teams_combined_df['Pt.'], errors='coerce').fillna(0.0)
+        all_teams_combined_df['Games'] = pd.to_numeric(all_teams_combined_df['Games'], errors='coerce').fillna(0).astype(int)
         if not all(col in all_teams_combined_df.columns for col in required_agg_cols):
              logging.error(f"Missing required columns for final summary: {required_agg_cols}. Aborting.")
         else:
@@ -519,4 +521,5 @@ else:
 
 
 print("--- Execution Finished ---")
+
 
