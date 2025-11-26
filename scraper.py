@@ -409,7 +409,7 @@ else:
             if 'Pt.' in final_team_df.columns:
                  final_team_df = final_team_df.sort_values(by='Pt.', ascending=False)
             write_to_gsheet(gsheet_client, GOOGLE_SHEET_NAME, team_name, final_team_df)
-            time.sleep(3)
+            time.sleep(12)
         else: logging.warning(f"Skipping sheet write for team '{team_name}' (empty).")
 
     # Overall Aggregation
@@ -450,7 +450,7 @@ else:
             # Write Summary Tabs
             logging.info(f"Writing full summary to tab '{SUMMARY_FULL_TAB_NAME}'...")
             write_to_gsheet(gsheet_client, GOOGLE_SHEET_NAME, SUMMARY_FULL_TAB_NAME, summary_full_output_df)
-            time.sleep(3)
+            time.sleep(12)
             logging.info(f"Writing filtered summary to tab '{SUMMARY_OOSTHOEK_TAB_NAME}'...")
             write_to_gsheet(gsheet_client, GOOGLE_SHEET_NAME, SUMMARY_OOSTHOEK_TAB_NAME, summary_oosthoek_output_df)
 
@@ -521,5 +521,6 @@ else:
 
 
 print("--- Execution Finished ---")
+
 
 
