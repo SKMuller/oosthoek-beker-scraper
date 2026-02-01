@@ -9,6 +9,10 @@ import re
 import gspread.utils # Ensure this is imported
 import os
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if it exists (for local development)
+load_dotenv()
 
 # --- Authentication ---
 # Load credentials from the environment variable set in GitHub Actions
@@ -72,6 +76,10 @@ GOOGLE_SHEET_NAME = "Oosthoek beker" # <--- User should ensure this is correct
 SUMMARY_FULL_TAB_NAME = "Summary - Full"
 SUMMARY_OOSTHOEK_TAB_NAME = "Summary - Oosthoek"
 MIN_GAMES_FOR_OOSTHOEK = 5
+
+# Website Export Configuration
+WEBSITE_EXPORT_TAB_NAME = "Website-Export"
+WEBSITE_MIN_WIN_PCT = 50.0  # Only show players with > 50% win rate
 
 # Google Sheet Formatting
 AUTO_RESIZE_COLUMNS = True
@@ -453,6 +461,34 @@ else:
             time.sleep(12)
             logging.info(f"Writing filtered summary to tab '{SUMMARY_OOSTHOEK_TAB_NAME}'...")
             write_to_gsheet(gsheet_client, GOOGLE_SHEET_NAME, SUMMARY_OOSTHOEK_TAB_NAME, summary_oosthoek_output_df)
+
+            # --- WEBSITE EXPORT ---
+            # Filter: Start with the Oosthoek summary (already filtered by min games)
+            # Then apply the Win % cutoff logic.
+            # Note: We use the 'summary_oosthoek' DF before renaming columns to ensure consistent logic
+            website_df = summary_oosthoek[summary_oosthoek['Win_Percentage'] >= WEBSITE_MIN_WIN_PCT].copy()
+            
+            # Clean Player Names for CSV Safety (Remove commas to prevent column shifting)
+            # Assumption: Format is "Lastname, Initials" or "Lastname, Initials (Firstname)"
+            # We will convert to "Initials Lastname" or just remove the comma.
+            if 'Speler' in website_df.columns:
+                 def clean_name(name):
+                     if ',' in name:
+                         parts = name.split(',', 1)
+                         lastname = parts[0].strip()
+                         rest = parts[1].strip()
+                         # content in rest might be "J. (Jan)" -> take "J."
+                         # or just "J."
+                         return f"{rest} {lastname}"
+                     return name
+                 website_df['Speler'] = website_df['Speler'].apply(clean_name)
+
+            # Select only public-friendly columns if needed? For now, we keep same as Oosthoek summary
+            if SUMMARY_COLUMN_NAMES:
+                 website_df = website_df.rename(columns=rename_map)
+
+            logging.info(f"Writing website export to tab '{WEBSITE_EXPORT_TAB_NAME}' (Win >= {WEBSITE_MIN_WIN_PCT}%)...")
+            write_to_gsheet(gsheet_client, GOOGLE_SHEET_NAME, WEBSITE_EXPORT_TAB_NAME, website_df)
 
             logging.info("Script finished successfully.")
 
