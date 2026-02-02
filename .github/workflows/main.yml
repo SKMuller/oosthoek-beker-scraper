@@ -3,8 +3,8 @@ name: Run Python Scraper
 on:
   schedule:
     # European dates requested:
-    # Feb: 08, 11, 21
-    - cron: '0 8 8,11,21 2 *'
+    # Feb: 04, 08, 11, 21
+    - cron: '0 8 4,8,11,21 2 *'
     # Mar: 08, 18, 19, 21, 29
     - cron: '0 8 8,18,19,21,29 3 *'
     # Apr: 12, 18
