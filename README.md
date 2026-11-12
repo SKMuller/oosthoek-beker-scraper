@@ -25,7 +25,11 @@ This will:
 1.  Scrape the latest results from the configured URLs (Netstand).
 2.  Process and aggregate the data.
 3.  Update the Google Sheet tabs (Teams, Summaries).
-4.  Update the **`Website-Export`** tab (Players with >= 50% score).
+4.  Update the **`Website-Export`** tab:
+    *   Shows players with >= 50% score.
+    *   If the `Summary - Oosthoek` tab has fewer than 20 players, it fills up with players from `Summary - Full` (no duplicates) to ensure at least 20 players are displayed.
+    *   Ineligible players are sorted by **amount of games played > win %** (prioritizing players closer to eligibility).
+    *   Includes a `Komt in aanmerking` column marking eligible players (`✅`) vs. players not yet eligible with a cross and remaining games (e.g. `❌ (nog 3 partijen nodig)`).
 
 ## Website Integration (WordPress)
 

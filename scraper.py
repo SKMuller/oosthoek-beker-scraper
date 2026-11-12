@@ -84,6 +84,16 @@ MIN_GAMES_FOR_OOSTHOEK = 7
 # Website Export Configuration
 WEBSITE_EXPORT_TAB_NAME = "Website-Export"
 WEBSITE_MIN_WIN_PCT = 50.0  # Only show players with > 50% win rate
+WEBSITE_TARGET_PLAYER_COUNT = 20  # Minimum number of players in Website-Export
+DISCLAIMER_COLUMN_NAME = "Komt in aanmerking"
+DISCLAIMER_ELIGIBLE = "✅"
+DISCLAIMER_NOT_ELIGIBLE_TEMPLATE = "❌ (nog {needed} {unit} nodig)"
+
+def format_ineligible_disclaimer(games_played, min_games=MIN_GAMES_FOR_OOSTHOEK):
+    """Formats the disclaimer showing how many games a player still needs to become eligible."""
+    needed = max(0, min_games - int(games_played))
+    unit = "partij" if needed == 1 else "partijen"
+    return DISCLAIMER_NOT_ELIGIBLE_TEMPLATE.format(needed=needed, unit=unit)
 
 # Google Sheet Formatting
 AUTO_RESIZE_COLUMNS = True
@@ -470,7 +480,32 @@ else:
             # Filter: Start with the Oosthoek summary (already filtered by min games)
             # Then apply the Win % cutoff logic.
             # Note: We use the 'summary_oosthoek' DF before renaming columns to ensure consistent logic
-            website_df = summary_oosthoek[summary_oosthoek['Win_Percentage'] >= WEBSITE_MIN_WIN_PCT].copy()
+            eligible_website_df = summary_oosthoek[summary_oosthoek['Win_Percentage'] >= WEBSITE_MIN_WIN_PCT].copy()
+            if not eligible_website_df.empty:
+                eligible_website_df[DISCLAIMER_COLUMN_NAME] = DISCLAIMER_ELIGIBLE
+
+            # If there are fewer than 20 players in the Oosthoek tab, fill up with players from Summary - Full
+            if len(summary_oosthoek) < WEBSITE_TARGET_PLAYER_COUNT:
+                existing_players = set(eligible_website_df['Speler']) if not eligible_website_df.empty else set()
+                needed_players = WEBSITE_TARGET_PLAYER_COUNT - len(eligible_website_df)
+
+                filler_candidates = summary[~summary['Speler'].isin(existing_players)].copy()
+                # Sort ineligible players by games played (descending) > win percentage (descending)
+                filler_candidates = filler_candidates.sort_values(by=['Total_Games', 'Win_Percentage'], ascending=[False, False])
+                filler_above_min_win = filler_candidates[filler_candidates['Win_Percentage'] >= WEBSITE_MIN_WIN_PCT]
+
+                if len(filler_above_min_win) >= needed_players:
+                    fillers = filler_above_min_win.head(needed_players).copy()
+                else:
+                    remaining_needed = needed_players - len(filler_above_min_win)
+                    filler_below_min_win = filler_candidates[filler_candidates['Win_Percentage'] < WEBSITE_MIN_WIN_PCT].head(remaining_needed)
+                    fillers = pd.concat([filler_above_min_win, filler_below_min_win], ignore_index=True)
+
+                fillers[DISCLAIMER_COLUMN_NAME] = fillers['Total_Games'].apply(format_ineligible_disclaimer)
+                website_df = pd.concat([eligible_website_df, fillers], ignore_index=True)
+                logging.info(f"Oosthoek tab has {len(summary_oosthoek)} (< {WEBSITE_TARGET_PLAYER_COUNT}) players. Filled Website-Export with {len(fillers)} players from Full summary.")
+            else:
+                website_df = eligible_website_df.copy()
             
             # Clean Player Names for CSV Safety (Remove commas to prevent column shifting)
             # Assumption: Format is "Lastname, Initials" or "Lastname, Initials (Firstname)"
@@ -487,11 +522,11 @@ else:
                      return name
                  website_df['Speler'] = website_df['Speler'].apply(clean_name)
 
-            # Select only public-friendly columns if needed? For now, we keep same as Oosthoek summary
+            # Rename columns if needed
             if SUMMARY_COLUMN_NAMES:
                  website_df = website_df.rename(columns=rename_map)
 
-            logging.info(f"Writing website export to tab '{WEBSITE_EXPORT_TAB_NAME}' (Win >= {WEBSITE_MIN_WIN_PCT}%)...")
+            logging.info(f"Writing website export to tab '{WEBSITE_EXPORT_TAB_NAME}' ({len(website_df)} players)...")
             write_to_gsheet(gsheet_client, GOOGLE_SHEET_NAME, WEBSITE_EXPORT_TAB_NAME, website_df)
 
             logging.info("Script finished successfully.")
