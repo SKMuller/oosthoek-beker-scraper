@@ -48,23 +48,27 @@ print("Setup Complete. Proceed to the Configuration cell.")
 
 # Dictionary: { "Team Name for Tab": ["URL1", "URL2", ...] }
 TEAM_URLS = {
-    "SISSA 1 - NOSBO": ["https://nosbo.netstand.nl/teams/view/608"],
-    "SISSA 2 - NOSBO": ["https://nosbo.netstand.nl/teams/view/624"],
-    "SISSA 3 - NOSBO": ["https://nosbo.netstand.nl/teams/view/617"],
-    "SISSA 4 - NOSBO": ["https://nosbo.netstand.nl/teams/view/616"],
-    "SISSA 5 - NOSBO": ["https://nosbo.netstand.nl/teams/view/639"],
-    "SISSA 6 - NOSBO": ["https://nosbo.netstand.nl/teams/view/631"],
+    "SISSA 1 - NOSBO": ["https://nosbo.netstand.nl/teams/view/686"],
+    "SISSA 2 - NOSBO": ["https://nosbo.netstand.nl/teams/view/685"],
+    "SISSA 3 - NOSBO": ["https://nosbo.netstand.nl/teams/view/692"],
+    "SISSA 4 - NOSBO": ["https://nosbo.netstand.nl/teams/view/699"],
+    "SISSA 5 - NOSBO": ["https://nosbo.netstand.nl/teams/view/714"],
+    "SISSA 6 - NOSBO": ["https://nosbo.netstand.nl/teams/view/706"],
+    "SISSA 7 - NOSBO": ["https://nosbo.netstand.nl/teams/view/713"],
+    "SISSA 8 - NOSBO": ["https://nosbo.netstand.nl/teams/view/707"],
 
-    "SISSA - Open Beker": ["https://nosbo.netstand.nl/teams/view/652"],
-    "SISSA - 1900 Beker": ["https://nosbo.netstand.nl/teams/view/665"],
-    "SISSA - 1700 Beker": ["https://nosbo.netstand.nl/teams/view/668"],
+    "SISSA - Open Beker": ["https://nosbo.netstand.nl/teams/view/731"],
+    "SISSA - 1950 Beker": ["https://nosbo.netstand.nl/teams/view/742"],
+    "SISSA - 1750 Beker": ["https://nosbo.netstand.nl/teams/view/750"],
 
-    "SISSA 1 - KNSB": ["https://knsb.netstand.nl/teams/view/6259"],
-    "SISSA 2 - KNSB": ["https://knsb.netstand.nl/teams/view/6251"],
-    "SISSA 3 - KNSB": ["https://knsb.netstand.nl/teams/view/6452"],
-    "SISSA 4 - KNSB": ["https://knsb.netstand.nl/teams/view/6459"],
+    "SISSA 1 - KNSB": ["https://knsb.netstand.nl/teams/view/7041"],
+    "SISSA 2 - KNSB": ["https://knsb.netstand.nl/teams/view/7111"],
+    "SISSA 3 - KNSB": ["https://knsb.netstand.nl/teams/view/7200"],
+    "SISSA 4 - KNSB": ["https://knsb.netstand.nl/teams/view/7298"],
+    "SISSA 5 - KNSB": ["https://knsb.netstand.nl/teams/view/7299"],
+    "SISSA 6 - KNSB": ["https://knsb.netstand.nl/teams/view/7384"],
 
-    "SISSA - KNSB Beker": ["https://knsb.netstand.nl/teams/view/6610"]
+    "SISSA - KNSB Beker": ["https://knsb.netstand.nl/teams/view/7498"]
 }
 
 # Columns to extract directly from the table (used during initial processing)
@@ -72,10 +76,10 @@ DESIRED_COLUMNS = ['Speler', 'Rating', 'Pt.', 'TPR', 'W-We', 'Kl.']
 
 # Google Sheet Configuration
 # !!! IMPORTANT: The user running this notebook MUST have EDIT access to this Google Sheet !!!
-GOOGLE_SHEET_NAME = "Oosthoek beker" # <--- User should ensure this is correct
+GOOGLE_SHEET_NAME = "Oosthoek beker 2026/2027" # <--- User should ensure this is correct
 SUMMARY_FULL_TAB_NAME = "Summary - Full"
 SUMMARY_OOSTHOEK_TAB_NAME = "Summary - Oosthoek"
-MIN_GAMES_FOR_OOSTHOEK = 5
+MIN_GAMES_FOR_OOSTHOEK = 7
 
 # Website Export Configuration
 WEBSITE_EXPORT_TAB_NAME = "Website-Export"
