@@ -2,19 +2,50 @@ name: Run Python Scraper
 
 on:
   schedule:
-    # European dates requested:
-    # Feb: 04, 08, 11, 21
-    - cron: '0 8 4,8,11,21 2 *'
-    # Mar: 08, 18, 19, 21, 29
-    - cron: '0 8 8,18,19,21,29 3 *'
-    # Apr: 12, 18
-    - cron: '0 8 12,18 4 *'
+    # Remaining 2026/2027 KNSB & NOSBO rounds (runs the morning after each match day):
+    # Nov 2026:
+    #   - Nov 14 (day after Nov 13 NOSBO R2: Van der Linde I - Middelstum I, etc.)
+    #   - Nov 21 (day after Nov 20 NOSBO R2: SISSA VII - Leek II & NOSBO R2 deadline)
+    #   - Nov 22 (day after Nov 21 KNSB R4)
+    - cron: '0 8 14,21,22 11 *'
+
+    # Dec 2026:
+    #   - Dec 05 (day after Dec 04 NOSBO R3: Leek II - SISSA V, etc.)
+    #   - Dec 12 (day after Dec 11 NOSBO R3 deadline)
+    #   - Dec 13 (day after Dec 12 KNSB R5)
+    #   - Dec 19 (day after Dec 18 NOSBO Beker R1 deadline)
+    - cron: '0 8 5,12,13,19 12 *'
+
+    # Jan 2027:
+    #   - Jan 10 (day after Jan 09 KNSB R6)
+    #   - Jan 19 & Jan 20 (days after Jan 18/19 NOSBO R4: ESG I - SISSA IV, etc.)
+    #   - Jan 30 (day after Jan 29 NOSBO R4 deadline)
+    - cron: '0 8 10,19,20,30 1 *'
+
+    # Feb 2027:
+    #   - Feb 13 (day after Feb 12 NOSBO R5: SISSA III - Middelstum I, etc.)
+    #   - Feb 20 (day after Feb 19 NOSBO R5 deadline)
+    - cron: '0 8 13,20 2 *'
+
+    # Mar 2027:
+    #   - Mar 02, Mar 05, Mar 06 (days after Mar 01/04/05 NOSBO R6: Leek I - SISSA I, etc.)
+    #   - Mar 13 (day after Mar 12 NOSBO R6 deadline)
+    #   - Mar 14 (day after Mar 13 KNSB R7)
+    - cron: '0 8 2,5,6,13,14 3 *'
+
+    # Apr 2027:
+    #   - Apr 04 (day after Apr 03 KNSB R8)
+    #   - Apr 07, Apr 10 (days after Apr 06/09 NOSBO R7)
+    #   - Apr 17 (day after Apr 16 NOSBO R7 deadline)
+    #   - Apr 18 (day after Apr 17 KNSB R9)
+    - cron: '0 8 4,7,10,17,18 4 *'
+
   workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    
+
     # This block injects the secret as an environment variable
     env:
       GSPREAD_CREDS_JSON: ${{ secrets.GSPREAD_CREDS }}
@@ -26,15 +57,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10' 
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
-      # The "Create credentials file" step is no longer needed
 
       - name: Run scraper
         run: |
           python scraper.py
+
